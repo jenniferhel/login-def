@@ -12,39 +12,37 @@
 <body>
 
   <div class="container" id="container">
-    <!-- Cadastro -->
     <div class="form-container sign-up">
       <form id="registerForm">
-        <h1>Crie sua conta.</h1>.
+        <h1>Crie sua conta.</h1>
         <span>ou use seu email para se registrar</span>
         <input type="text" placeholder="Name" />
         <input type="email" id="email" placeholder="Email" required />
         <input type="password" id="senha" placeholder="Password" required />
         <input type="password" id="confirmarSenha" placeholder="Confirmed Password" required />
         <button type="submit" id="registerBtn">Cadastrar</button>
-        <p id="mensagem"></p>
+        <div id="mensagem" class="mensagem-box"></div>
       </form>
     </div>
 
-    <!-- Login -->
+    <!-- Parte de login -->
     <div class="form-container sign-in">
       <form id="loginForm">
         <h1>Entrar</h1>
-        <span>ou use a senha do seu e-mail</span>
-        <input id="emailLogin" type="email" placeholder="Email" required />
+        <input id="email2" type="email" placeholder="Email" required />
         <input id="passwordLogin" type="password" placeholder="Password" required />
         <a href="/html/recuperar.html">Esqueceu a senha?</a>
         <button type="submit">Entrar</button>
       </form>
     </div>
 
-    <!-- Alternância -->
+    <!-- Mudança -->
     <div class="toggle-container">
       <div class="toggle">
         <div class="toggle-panel toggle-left">
           <h1>Bem vindo de volta!</h1>
           <p>Os detalhes você já sabe, entre e aproveite nossas ferramentas</p>
-          <button class="hidden" id="loginBtn">Entrar</button>
+          <button class="hidden" id="login">Entrar</button>
         </div>
         <div class="toggle-panel toggle-right">
           <h1>Não tem uma conta? Vem com a gente</h1>
@@ -55,11 +53,11 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase acessos -->
   <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase Config + Funções -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDqqHorF3zNafVJW_F9BJQhI1f8ZfzCxMY",
@@ -71,66 +69,142 @@
     };
 
     firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    function verificarSenhas(e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const senha = document.getElementById("senha").value;
-      const confirmarSenha = document.getElementById("confirmarSenha").value;
-      const mensagem = document.getElementById("mensagem");
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("container");
+      const registerBtn = document.getElementById("register");
+      const loginToggleBtn = document.getElementById("login");
+      const registerForm = document.getElementById("registerForm");
+      const loginForm = document.getElementById("loginForm");
 
-      if (senha !== confirmarSenha) {
-        mensagem.textContent = "As senhas não coincidem!";
-        mensagem.style.color = "red";
-        return;
+      function isValidPassword(password) {
+        const regex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+        return regex.test(password);
       }
 
-      firebase.auth().createUserWithEmailAndPassword(email, senha)
-        .then(userCredential => {
-          mensagem.textContent = "Cadastro realizado com sucesso!";
-          mensagem.style.color = "green";
-          console.log("Usuário cadastrado:", userCredential.user);
-          window.location.href = "/html/login.html"; // Redireciona para a página inicial
-        })
-        .catch(error => {
-          mensagem.textContent = error.message;
-          mensagem.style.color = "red";
-          console.error("Erro no cadastro:", error);
+      if (registerBtn && container) {
+        registerBtn.addEventListener("click", () => {
+          container.classList.add("active");
         });
-    }
+      }
 
-    function loginUser(e) {
-      e.preventDefault();
-      const email = document.getElementById("emailLogin").value.trim();
-      const senha = document.getElementById("passwordLogin").value;
-
-      firebase.auth().signInWithEmailAndPassword(email, senha)
-        .then(userCredential => {
-          alert("Login realizado com sucesso!");
-          console.log("Usuário logado:", userCredential.user);
-          window.location.href = "/html/landing-page.html"; // Redireciona para a página inicial
-        })
-        .catch(error => {
-          alert("Erro no login: " + error.message);
-          console.error("Erro no login:", error);
+      if (loginToggleBtn && container) {
+        loginToggleBtn.addEventListener("click", () => {
+          container.classList.remove("active");
         });
-    }
+      }
 
-    // Eventos
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('registerForm').addEventListener('submit', verificarSenhas);
-      document.getElementById('loginForm').addEventListener('submit', loginUser);
+      if (registerForm) {
+        registerForm.addEventListener("submit", (e) => {
+          e.preventDefault();
 
-      const container = document.getElementById('container');
-      const registerToggle = document.getElementById('register');
-      const loginToggle = document.getElementById('loginBtn');
+          const email = document.getElementById("email").value.trim();
+          const senha = document.getElementById("senha").value;
+          const confirmarSenha = document.getElementById("confirmarSenha").value;
+          const nome = document.querySelector('input[placeholder="Name"]').value;
+          const mensagem = document.getElementById("mensagem");
 
-      registerToggle.addEventListener('click', () => container.classList.add("active"));
-      loginToggle.addEventListener('click', () => container.classList.remove("active"));
+          mensagem.className = "mensagem-box";
+          mensagem.style.display = "block";
+
+          if (!email || !senha || !confirmarSenha || !nome) {
+            mensagem.textContent = "Por favor, preencha todos os campos.";
+            mensagem.classList.add("mensagem-erro");
+            return;
+          }
+
+          if (senha !== confirmarSenha) {
+            mensagem.textContent = "As senhas não coincidem!";
+            mensagem.classList.add("mensagem-erro");
+            return;
+          }
+
+          if (senha.length < 6 || !isValidPassword(senha)) {
+            mensagem.textContent = "A senha deve conter pelo menos uma letra e um número, com no mínimo 6 caracteres.";
+            mensagem.classList.add("mensagem-erro");
+            return;
+          }
+
+          firebase.auth().createUserWithEmailAndPassword(email, senha)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              db.collection("users").doc(user.uid).set({
+                nome: nome,
+                email: user.email,
+                criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+              })
+              .then(() => {
+                mensagem.textContent = "Cadastro realizado com sucesso! Faça login.";
+                mensagem.classList.add("mensagem-sucesso");
+                container.classList.remove("active");
+                registerForm.reset();
+              })
+              .catch((error) => {
+                mensagem.textContent = "Erro ao salvar dados no Firestore.";
+                mensagem.classList.add("mensagem-erro");
+                console.error("Erro Firestore:", error);
+              });
+            })
+            .catch((error) => {
+              let msg = "Erro no cadastro.";
+              if (error.code === "auth/email-already-in-use") {
+                msg = "Este e-mail já está cadastrado. Faça login ou use outro.";
+              } else if (error.code === "auth/invalid-email") {
+                msg = "O e-mail digitado é inválido.";
+              } else if (error.code === "auth/weak-password") {
+                msg = "A senha é muito fraca.";
+              }
+              mensagem.textContent = msg;
+              mensagem.classList.add("mensagem-erro");
+              console.error("Erro no cadastro:", error);
+            });
+        });
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById("email2").value.trim();
+          const senha = document.getElementById("passwordLogin").value;
+
+          if (!email || !senha) {
+            alert("Preencha todos os campos para login.");
+            return;
+          }
+
+          firebase.auth().signInWithEmailAndPassword(email, senha)
+            .then((userCredential) => {
+              alert("Login realizado com sucesso!");
+              window.location.href = "/html/landing-page.html";
+            })
+            .catch((error) => {
+              let mensagem;
+              switch (error.code) {
+                case "auth/invalid-email":
+                  mensagem = "E-mail inválido.";
+                  break;
+                case "auth/user-not-found":
+                  mensagem = "Usuário não encontrado.";
+                  break;
+                case "auth/wrong-password":
+                  mensagem = "Senha incorreta.";
+                  break;
+                case "auth/invalid-credential":
+                  mensagem = "Credenciais inválidas.";
+                  break;
+                default:
+                  mensagem = error.message;
+              }
+              alert("Erro no login: " + mensagem);
+              console.error("Erro no login:", error);
+            });
+        });
+      }
     });
-
-    
   </script>
+
 </body>
 
 </html>
