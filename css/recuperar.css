@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Cor de fundo e fontes padrões */
+body {
+    background-color: #c9d6ff;
+    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Estilo do container do formulário */
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Efeito visual no container ao passar o mouse */
+.auth-container:hover {
+    transform: translateY(-5px);
+}
+
+/* Estilo do título do formulário */
+.auth-form h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Estilo para os grupos de input */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Estilo dos rótulos (labels) */
+.form-group label {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    color: #555;
+    display: block;
+    font-weight: 500;
+}
+
+/* Estilo dos campos de input */
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #0056b3; /* Cor suave para o foco */
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.3); /* Efeito de sombra */
+}
+
+/* Estilo do botão */
+button {
+    background: linear-gradient(to right, #9db130, #75a82d);
+    color: #fff;
+    font-size: 12px;
+    border: 1px solid transparent;
+    width: 100%;
+    padding: 14px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #004080;
+    transform: translateY(-3px); /* Efeito de movimento ao passar o mouse */
+}
+
+button:active {
+    transform: translateY(1px); /* Efeito ao clicar no botão */
+}
+
+/* Mensagens de erro ou sucesso */
+.auth-message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #d9534f;
+    transition: opacity 0.3s ease;
+}
+
+.auth-message.success {
+    color: #5cb85c;
+}
+
+/* Estilo para os links */
+.auth-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-links a {
+    color: #0056b3;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+    color: #003c7d; /* Cor mais escura no hover */
+}
+
+/* Estilo das dicas de segurança */
+.security-tips {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e1e1e1;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.security-tips h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.security-tips ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.security-tips li {
+    margin-bottom: 8px;
+}

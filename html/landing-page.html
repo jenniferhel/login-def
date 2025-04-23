@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="/css/ld-pg.css">
+        <title>Landing Page | frjotav</title>
+    </head>
+    <body>
+        <div class="gradient-cursor" id="gradientCursor"></div>
+
+        <div class="page-wrapper">
+            <main class="content">
+                <h1>Olá, mundo? Seja bem vindo!</h1>
+                <p>Se isso fosse um filme essa seria a cena pós-créditos. Obrigado por assistir até o fim!</p>
+            </main>
+        </div> 
+    
+        <button class="logout-btn" id="logoutBtn" title="Sair?">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+        
+
+        <footer class="footer">
+            <p>Desenvolvido por nós! &copy; 2023</p>
+        </footer>
+        <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+
+        <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqqHorF3zNafVJW_F9BJQhI1f8ZfzCxMY",
+            authDomain: "loginn-trab.firebaseapp.com",
+            projectId: "loginn-trab",
+            storageBucket: "loginn-trab.appspot.com",
+            messagingSenderId: "689085505729",
+            appId: "1:689085505729:web:5c91f26100db98bf6d7440"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            firebase.auth().signOut().then(() => {
+            window.location.href = "/html/login.html"; // certifique-se de que esse caminho está certo
+            }).catch((error) => {
+            console.error("Erro ao sair:", error);
+            });
+        });
+        </script>
+
+    </body>
+</html>

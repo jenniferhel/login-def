@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Login Page</title>
+</head>
+
+<body>
+
+  <div class="container" id="container">
+    <!-- Cadastro -->
+    <div class="form-container sign-up">
+      <form id="registerForm">
+        <h1>Crie sua conta.</h1>.
+        <span>ou use seu email para se registrar</span>
+        <input type="text" placeholder="Name" />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="senha" placeholder="Password" required />
+        <input type="password" id="confirmarSenha" placeholder="Confirmed Password" required />
+        <button type="submit" id="registerBtn">Cadastrar</button>
+        <p id="mensagem"></p>
+      </form>
+    </div>
+
+    <!-- Login -->
+    <div class="form-container sign-in">
+      <form id="loginForm">
+        <h1>Entrar</h1>
+        <span>ou use a senha do seu e-mail</span>
+        <input id="emailLogin" type="email" placeholder="Email" required />
+        <input id="passwordLogin" type="password" placeholder="Password" required />
+        <a href="/html/recuperar.html">Esqueceu a senha?</a>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+
+    <!-- Alternância -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>Bem vindo de volta!</h1>
+          <p>Os detalhes você já sabe, entre e aproveite nossas ferramentas</p>
+          <button class="hidden" id="loginBtn">Entrar</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Não tem uma conta? Vem com a gente</h1>
+          <p>Se inscreva e aproveite todas as nossas ferramentas!</p>
+          <button class="hidden" id="register">Inscrever-se</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+
+  <!-- Firebase Config + Funções -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqqHorF3zNafVJW_F9BJQhI1f8ZfzCxMY",
+      authDomain: "loginn-trab.firebaseapp.com",
+      projectId: "loginn-trab",
+      storageBucket: "loginn-trab.appspot.com",
+      messagingSenderId: "689085505729",
+      appId: "1:689085505729:web:5c91f26100db98bf6d7440"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    function verificarSenhas(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value;
+      const confirmarSenha = document.getElementById("confirmarSenha").value;
+      const mensagem = document.getElementById("mensagem");
+
+      if (senha !== confirmarSenha) {
+        mensagem.textContent = "As senhas não coincidem!";
+        mensagem.style.color = "red";
+        return;
+      }
+
+      firebase.auth().createUserWithEmailAndPassword(email, senha)
+        .then(userCredential => {
+          mensagem.textContent = "Cadastro realizado com sucesso!";
+          mensagem.style.color = "green";
+          console.log("Usuário cadastrado:", userCredential.user);
+          window.location.href = "/html/login.html"; // Redireciona para a página inicial
+        })
+        .catch(error => {
+          mensagem.textContent = error.message;
+          mensagem.style.color = "red";
+          console.error("Erro no cadastro:", error);
+        });
+    }
+
+    function loginUser(e) {
+      e.preventDefault();
+      const email = document.getElementById("emailLogin").value.trim();
+      const senha = document.getElementById("passwordLogin").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, senha)
+        .then(userCredential => {
+          alert("Login realizado com sucesso!");
+          console.log("Usuário logado:", userCredential.user);
+          window.location.href = "/html/landing-page.html"; // Redireciona para a página inicial
+        })
+        .catch(error => {
+          alert("Erro no login: " + error.message);
+          console.error("Erro no login:", error);
+        });
+    }
+
+    // Eventos
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('registerForm').addEventListener('submit', verificarSenhas);
+      document.getElementById('loginForm').addEventListener('submit', loginUser);
+
+      const container = document.getElementById('container');
+      const registerToggle = document.getElementById('register');
+      const loginToggle = document.getElementById('loginBtn');
+
+      registerToggle.addEventListener('click', () => container.classList.add("active"));
+      loginToggle.addEventListener('click', () => container.classList.remove("active"));
+    });
+
+    
+  </script>
+</body>
+
+</html>

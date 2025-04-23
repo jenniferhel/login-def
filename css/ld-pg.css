@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #e2e2e2, #fefff4);
+    color: #111;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 100vh;
+    overflow: visible;
+    animation: floatPage ease-in-out infinite alternate;
+}
+
+
+
+.gradient-cursor {
+
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    pointer-events: none;
+    background: radial-gradient(circle,  #85a82d67,rgba(10, 71, 2, 0.022) 70%);
+    filter: blur(100px);
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 120px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3.5rem;
+    line-height: 1.2;
+}
+
+p {
+    font-size: 1.25rem;
+    margin-top: 20px;
+}
+
+.logout-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #85a82d;
+    border: none;
+    border-radius: 30%;
+    padding: 12px;
+    cursor: pointer;
+    z-index: 10;
+    color: white;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+  
+  .logout-btn:hover {
+    transform: scale(1.1);
+    background-color: #6f901e;
+  }
+  
+
+.page-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: floatPage 6s ease-in-out infinite alternate;
+    transform-origin: center;
+}
+
+@keyframes floatPage {
+    0% {
+    transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+    transform: translateY(-8px) rotate(-0.3deg);
+    }
+    100% {
+    transform: translateY(8px) rotate(0.3deg);
+    }
+}
+
+footer {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.34rem; /* menor mas ainda legível */
+    color: #666;         /* cor mais suave */
+    opacity: 0.6;        /* mais discreto */
+    font-weight: 300;    /* leveza no visual */
+    letter-spacing: 0.5px;
+    user-select: none;
+    z-index: 10;
+      
+  }
+  
+  footer a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  footer a:hover {
+    opacity: 1;
+    color: #85a82d;
+  }
+  

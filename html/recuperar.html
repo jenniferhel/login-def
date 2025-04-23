@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha</title>
+    <link rel="stylesheet" href="/css/recuperar.css">
+</head>
+<body>
+    <div class="auth-container">
+        <form id="reset-form" class="auth-form">
+            <h2>Recuperar Senha</h2>
+            <div class="form-group">
+                <label for="reset-email">E-mail cadastrado</label>
+                <input type="email" id="reset-email" required>
+            </div>
+            <button type="submit">Enviar Link de Recuperação</button>
+            <div id="reset-message" class="auth-message"></div>
+            
+            <!-- Dicas de segurança -->
+            <div class="security-tips">
+                <h3>Dicas para uma senha segura:</h3>
+                <ul>
+                    <li>Use pelo menos 8 caracteres.</li>
+                    <li>Inclua uma combinação de letras maiúsculas, minúsculas e números.</li>
+                    <li>Evite usar informações pessoais óbvias, como seu nome ou data de nascimento.</li>
+                    <li>Adicione caracteres especiais, como @, #, $, etc.</li>
+                    <li>Não use senhas simples como "123456" ou "senha".</li>
+                </ul>
+            </div>
+            
+            <div class="auth-links">
+                <a href="/html/login.html">Voltar para Login</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+
+    <!-- Firebase Config + Funções -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqqHorF3zNafVJW_F9BJQhI1f8ZfzCxMY",
+            authDomain: "loginn-trab.firebaseapp.com",
+            projectId: "loginn-trab",
+            storageBucket: "loginn-trab.appspot.com",
+            messagingSenderId: "689085505729",
+            appId: "1:689085505729:web:5c91f26100db98bf6d7440"
+        };
+
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Função de recuperação de senha
+        async function resetPassword(email) {
+            const auth = firebase.auth();
+            try {
+                await auth.sendPasswordResetEmail(email);
+                return { success: true, message: "E-mail de recuperação enviado!" };
+            } catch (error) {
+                return { success: false, message: getAuthErrorMessage(error) };
+            }
+        }
+
+        // Função para traduzir os erros do Firebase
+        function getAuthErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    return 'O e-mail fornecido não é válido.';
+                case 'auth/user-not-found':
+                    return 'Nenhum usuário encontrado com esse e-mail.';
+                case 'auth/missing-email':
+                    return 'O e-mail é obrigatório.';
+                default:
+                    return 'Erro desconhecido. Tente novamente mais tarde.';
+            }
+        }
+
+        // Manipulador de envio do formulário de recuperação de senha
+        document.getElementById('reset-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evitar envio normal do formulário
+
+            const email = document.getElementById('reset-email').value.trim();
+            const messageElement = document.getElementById('reset-message');
+            
+            if (!email) {
+                messageElement.textContent = "Por favor, forneça um e-mail.";
+                messageElement.style.color = "red";
+                return;
+            }
+
+            const result = await resetPassword(email);
+
+            messageElement.textContent = result.message;
+            messageElement.style.color = result.success ? "green" : "red";
+        });
+    </script>
+</body>
+</html>
